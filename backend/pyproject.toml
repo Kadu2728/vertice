@@ -38,6 +38,9 @@ target-version = "py312"
 strict = true
 files = ["domain", "application", "infra", "api"]
 
+[tool.setuptools.packages.find]
+include = ["domain*", "application*", "infra*", "api*"]
+
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
