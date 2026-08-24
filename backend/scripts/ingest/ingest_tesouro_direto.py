@@ -62,6 +62,11 @@ if __name__ == "__main__":
     parsed_date = datetime.strptime(args.date, "%Y-%m-%d").date() if args.date else None
     try:
         run(backfill=args.backfill, target_date=parsed_date)
+        if not args.backfill and parsed_date is None:
+            # TEMPORÁRIO — backfill pontual da Data Base fixa que o frontend
+            # usa como PURCHASE_DATE (simulator.tsx), ausente no banco de
+            # produção recém-criado. Remover depois de confirmar em prod.
+            run(backfill=False, target_date=date(2025, 1, 2))
     except Exception:
         logger.exception("falha na ingestão do Tesouro Direto")
         sys.exit(1)
