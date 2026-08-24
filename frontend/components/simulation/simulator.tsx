@@ -54,7 +54,13 @@ export function Simulator({ initialBondId }: { initialBondId?: string } = {}) {
   useEffect(() => {
     listBonds()
       .then((all) => {
-        const supported = all.filter((b) => SUPPORTED_TYPES.has(b.bondType));
+        // Título vencido antes da data de referência já foi resgatado —
+        // não existe cotação de mercado depois do vencimento, então não é
+        // simulável (evita cair num "cotação não encontrada" com o título
+        // pré-selecionado por padrão).
+        const supported = all.filter(
+          (b) => SUPPORTED_TYPES.has(b.bondType) && b.maturityDate > REFERENCE_DATE,
+        );
         setBonds(supported);
         setBondId((current) => current || initialBondId || supported[0]?.id || "");
         setStatus("idle");
